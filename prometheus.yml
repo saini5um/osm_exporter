@@ -1,0 +1,96 @@
+# my global config
+global:
+  scrape_interval: 15s     
+  evaluation_interval: 15s
+  scrape_timeout: 10s
+  # scrape_interval:     60s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  # evaluation_interval: 60s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+  external_labels:
+    monitor: 'codelab-monitor'
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      - 10.196.54.243:9093
+      # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  - "alert_rules.yml"
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: 'prometheus'
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['slc10zct.us.oracle.com:9090']
+ 
+  - job_name: 'den00olk'
+    scrape_interval: '15s'
+    metrics_path: '/wls-exporter/metrics'
+    basic_auth:
+      username: 'weblogic'
+      password: 'weblogic1'
+    relabel_configs:
+    - regex: '(name)'
+      action: labeldrop
+    static_configs:
+     - targets: ['den00olk.us.oracle.com:7001']
+
+
+  - job_name: 'den00ogg'
+    scrape_interval: 60s
+    static_configs:
+     - targets: ['den00ogg.us.oracle.com:9100']
+
+  - job_name: 'sequence_monitor'
+    scrape_interval: '15s'
+    static_configs:
+     - targets: ['den00ogg.us.oracle.com:9001']
+
+  - job_name: 'slc13kam'
+    scrape_interval: '15s'
+    static_configs:
+     - targets: ['slc13kam.us.oracle.com:9005']
+
+
+  - job_name: 'ece_monitor'
+    scrape_interval: '15s'
+    static_configs:
+     - targets: ['den00ogg.us.oracle.com:5050']
+
+  - job_name: 'den00oll_monitor'
+    scrape_interval: '15s'
+    static_configs:
+     - targets: ['den00oll.us.oracle.com:9100']
+
+  - job_name: 'slc10zct_node_exporter'
+    scrape_interval: '15s'
+    static_configs:
+     - targets: ['slc10zct.us.oracle.com:9100']
+
+  - job_name: 'blr2223041'
+    scrape_interval: 60s
+    static_configs:
+     - targets: ['blr2223041.in.oracle.com:9100']
+
+  - job_name: 'blr2223041_wls'
+    scrape_interval: '15s'
+    metrics_path: '/wls-exporter/metrics'
+    basic_auth:
+      username: 'weblogic'
+      password: 'c1g2b3u4'
+    metric_relabel_configs:
+      - source_labels: [__name__]
+        target_label: __name__
+    static_configs:
+     - targets: ['blr2223041.in.oracle.com:7011']

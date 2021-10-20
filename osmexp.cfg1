@@ -1,0 +1,24 @@
+{
+  "DATABASE": {
+     "USERNAME": "ordermgmt",
+     "PASSWORD": "CGBUpassw0rd",
+     "HOST": "10.242.44.23",
+     "SERVICE": "orcl"
+  },
+  "HTTP": {
+     "PORT": 9005
+  },
+  "SQL": {
+     "num_order_sql": "select count(1) from om_order_header where ord_creation_date > sysdate - 2",
+     "num_compl_order_sql": "select count(1) from om_order_header where ord_creation_date > sysdate - 2 and ord_state_id = 7",
+     "num_prog_order_sql": "select count(1) from om_order_header where ord_creation_date > sysdate - 2 and ord_state_id = 4",
+     "num_cancel_order_sql": "select count(1) from om_order_header where ord_creation_date > sysdate - 2 and ord_state_id = 3",
+     "num_fail_order_sql": "select count(1) from om_order_header where ord_creation_date > sysdate - 2 and ord_state_id > 7",
+     "sla_breach_sql": "select count(1) from om_order_header where ord_state_id = 4 and sysdate - ord_start_date > 0.5",
+     "som_lifetime_sql": "select avg((ord_completion_date - ord_start_date)*24*60) from om_order_header where ord_creation_date > sysdate - 7 and ord_state_id = 7 and cartridge_id = 1066",
+     "tom_lifetime_sql": "select avg((ord_completion_date - ord_start_date)*24*60) from om_order_header where ord_creation_date > sysdate - 7 and ord_state_id = 7 and cartridge_id = 1062",
+     "test_sql": "select order_seq_id from om_order_header"
+   },
+   "SLEEPTIME": 15
+}
+
